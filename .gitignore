@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+build/
+.env*
+!.env.example
+*.log
+.DS_Store
+frontend/data/state.json
+frontend/data/*.json
+frontend/lib/state.bak.ts
+.cursor/
+
+# Firebase / GCP
+service-account.json
+.env.local
+.env

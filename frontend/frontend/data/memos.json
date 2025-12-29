@@ -1,0 +1,22 @@
+[
+  {
+    "id": "d6590f2c-ce5e-4bf2-9b07-f3a29ed6af56",
+    "content": "444",
+    "createdAt": "2025-12-29T23:07:42.026Z",
+    "updatedAt": "2025-12-29T23:07:44.745Z",
+    "comments": [
+      {
+        "id": "9e7881e5-a344-49f4-9193-c5c57f4f95a6",
+        "content": "4466",
+        "createdAt": "2025-12-29T23:07:44.745Z"
+      }
+    ]
+  },
+  {
+    "id": "a34f1adb-2b2b-47e5-a6f4-ff56abe01958",
+    "content": "현재 메뉴/기능 요약\n상단 네비게이션: 금융일정(달력/목록), 메모, 자산·부채·정기지출·정기수입(홈 탭), 가계부(업로드/패턴분석), 대시보드.\nNavigation.tsxLines 9-32\nconst menuItems = [  { key: \"finance-schedule\", label: \"금융일정\", path: \"/finance-schedule\" },  { key: \"memo\", label: \"메모\", path: \"/memo\" },  { key: \"assets\", label: \"자산\", path: \"/\", subMenus: [...] },  { key: \"debts\", label: \"부채\", path: \"/\", subMenus: [...] },  ...]\n홈(/): 자산→부채→정기지출→정기수입 입력 위자드, 각 단계 저장/로드.\nWizard.tsxLines 20-210\n<AssetStep ... /><DebtStep ... /><ExpenseStep ... /><IncomeStep ... />\n금융일정: 저장된 자산/부채/정기지출/수입을 불러와 달력/목록 뷰로 표시(쿼리 view=calendar|list).\npage.tsxLines 14-66\n<FinanceScheduleStep  assets={assets}  debts={debts}  expenses={expenses}  incomes={incomes}  initialViewMode={initialView === \"list\" ? \"list\" : \"calendar\"}/>\n가계부(Transactions): 기간/월별 필터, 수입·지출 집계, 엑셀 업로드, 재분류(재검증), 이름-카테고리 매핑 관리, 중복/검토 필요 처리, 페이지네이션, 개별 수정·삭제.\npage.tsxLines 339-605\n<ExcelUpload ... /><ReviewNeededList ... /><AmbiguousTransactionsList ... /><PatternAnalysis ... /><MappingManager ... />\n대시보드: 자산·부채·정기지출·정기수입 요약/목록, 순자산·월지출·월수입 카드, 데이터 출처 표시(데스크톱/모바일 레이아웃 분리).\npage.tsxLines 63-219\n총 자산/부채/월 지출/월 수입/순자산 카드 + 자산·부채·지출·수입 리스트 + 데이터 출처 표시\n메모: 메모 작성/고정/삭제, 댓글 달기, 서버 저장·동기화.\npage.tsxLines 20-200\naddMemoApi / addMemoComment / deleteMemo / 고정(togglePin) / 댓글 입력\n다음에 할 일(한 가지 제안)\nCloud Run 배포 준비: 로컬에서 gcloud init으로 프로젝트 선택만 먼저 해두고, 이후 Docker 빌드→푸시→Cloud Run 배포 시 PORT 환경값 사용하도록 서버 확인.",
+    "createdAt": "2025-12-16T16:18:55.182Z",
+    "updatedAt": "2025-12-16T16:18:55.182Z",
+    "comments": []
+  }
+]
