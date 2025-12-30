@@ -3,8 +3,8 @@
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
 
-// 이 토큰은 사용자님이 나중에 바꾸셔도 됩니다!
-const SECRET_TOKEN = 'money-flow-key-2025';
+// 이 토큰은 사용자만 아는 복잡한 난수로 설정합니다.
+const SECRET_TOKEN = 'mf_7a2b9c1d8e3f4g5h6i7j8k9l0m1n2o3p';
 
 function AuthContent({ children }: { children: React.ReactNode }) {
     const searchParams = useSearchParams();
