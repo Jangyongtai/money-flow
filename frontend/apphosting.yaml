@@ -2,11 +2,5 @@
 kind: "publishedConfig"
 apiVersion: "v1"
 
-# 환경 변수 및 비밀 설정
-env:
-  - variable: FIREBASE_SERVICE_ACCOUNT_KEY
-    secret: FIREBASE_SERVICE_ACCOUNT_KEY
-  - variable: GEMINI_API_KEY
-    secret: GEMINI_API_KEY
-  - variable: HOLIDAY_API_KEY
-    secret: HOLIDAY_API_KEY
+# 환경 변수 설정을 비워둡니다 (IAM 권한으로 자동 처리됨)
+env: []
