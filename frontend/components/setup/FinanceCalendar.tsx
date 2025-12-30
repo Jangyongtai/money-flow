@@ -20,10 +20,10 @@ type FinanceCalendarProps = {
   currentYear?: number
 }
 
-export default function FinanceCalendar({ 
-  events, 
+export default function FinanceCalendar({
+  events,
   currentMonth: initialMonth,
-  currentYear: initialYear 
+  currentYear: initialYear
 }: FinanceCalendarProps) {
   const now = new Date()
   const [currentMonth, setCurrentMonth] = useState(initialMonth ?? now.getMonth() + 1)
@@ -186,7 +186,7 @@ export default function FinanceCalendar({
 
                   const dayEvents = inCurrent ? getEventsForDay(day) : []
                   const hasEvents = dayEvents.length > 0
-                  
+
                   // 공휴일 확인
                   const dateStr = `${currentYear}-${String(currentMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`
                   const holidayName = inCurrent ? holidays.get(dateStr) : undefined
@@ -200,17 +200,17 @@ export default function FinanceCalendar({
                     const lines = dayEvents.map((ev) => {
                       const sign = ev.direction === "IN" ? "+" : "-"
                       const title = ev.title || (ev.direction === "IN" ? "수입" : "지출")
-                      const meta = ev.meta ? ` (${ev.meta})` : ""
-                      return `${sign}${ev.amount} · ${title}${meta}`
+                      // OTHER는 표시하지 않고, 그 외 카테고리는 한글로 변환하여 표시 (혹은 아예 제거)
+                      return `${sign}${ev.amount} · ${title}`
                     })
-                    pushToast(`[${currentMonth}.${day}]` + "\n" + lines.join("\n"))
+                    pushToast(`[${currentMonth}월 ${day}일]` + "\n" + lines.join("\n"))
                   }
 
                   return (
                     <div
                       key={idx}
                       className={cn(
-                      "h-18 md:h-28 border border-gray-200 p-1 md:p-2 text-[9px] md:text-sm relative",
+                        "h-18 md:h-28 border border-gray-200 p-1 md:p-2 text-[9px] md:text-sm relative",
                         isSunday && "bg-red-50 border-red-200", // 일요일 배경
                         isSaturday && "bg-blue-50 border-blue-200", // 토요일 배경
                         isHoliday && "bg-red-100 border-red-300",
@@ -227,12 +227,12 @@ export default function FinanceCalendar({
                             !inCurrent
                               ? "text-gray-400"
                               : isHoliday
-                              ? "text-red-700 font-bold"
-                              : isSunday
-                              ? "text-red-600"
-                              : isSaturday
-                              ? "text-blue-600"
-                              : "text-gray-700"
+                                ? "text-red-700 font-bold"
+                                : isSunday
+                                  ? "text-red-600"
+                                  : isSaturday
+                                    ? "text-blue-600"
+                                    : "text-gray-700"
                           )}
                         >
                           {day}

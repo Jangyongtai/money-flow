@@ -80,14 +80,22 @@ export default function FinanceScheduleStep({
   uniqueDebts.forEach((d) => {
     const payAmt = Number(d.paymentAmount) || 0
     if (payAmt > 0) {
-      events.push({
-        day: d.paymentDay ?? null,
-        dayLabel: d.paymentDay ? `${d.paymentDay}일` : "일자 미지정",
-        title: d.name || "부채 납입",
-        amount: payAmt,
-        direction: "OUT",
-        meta: d.interestRate ? `${d.interestRate}%` : undefined,
-      })
+      // 이름이 비슷하거나, 같은 날짜+금액이 이미 지출에 있으면 중복 방지
+      const isAlreadyInExpenses = uniqueExpenses.some(e =>
+        (e.name.includes(d.name) || d.name.includes(e.name)) ||
+        (Number(e.billingDay) === d.paymentDay && Number(e.amount) === payAmt)
+      );
+
+      if (!isAlreadyInExpenses) {
+        events.push({
+          day: d.paymentDay ?? null,
+          dayLabel: d.paymentDay ? `${d.paymentDay}일` : "일자 미지정",
+          title: d.name || "부채 납입",
+          amount: payAmt,
+          direction: "OUT",
+          meta: d.interestRate ? `${d.interestRate}%` : undefined,
+        })
+      }
     }
   })
   uniqueExpenses.forEach((e) => {
@@ -205,9 +213,8 @@ export default function FinanceScheduleStep({
                       <div key={idx} className="py-2 flex items-center justify-between">
                         <div className="min-w-0">
                           <div className="font-medium truncate">{ev.title}</div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-gray-400">
                             {ev.direction === "IN" ? "수입" : "지출"}
-                            {ev.meta ? ` · ${ev.meta}` : ""}
                           </div>
                         </div>
                         <div

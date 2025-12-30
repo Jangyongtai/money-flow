@@ -147,8 +147,16 @@ export async function upsertProfile(profile: Profile) {
 
 // Asset 관리
 export async function getAssets(profileId: string): Promise<Asset[]> {
-  const snapshot = await db.collection('profiles').doc(profileId).collection('assets').get();
-  return snapshot.docs.map(doc => doc.data() as Asset);
+  try {
+    console.log(`[DB] Fetching assets for profile: ${profileId}`);
+    const snapshot = await db.collection('profiles').doc(profileId).collection('assets').get();
+    const assets = snapshot.docs.map(doc => doc.data() as Asset);
+    console.log(`[DB] Successfully fetched ${assets.length} assets`);
+    return assets;
+  } catch (error) {
+    console.error(`[DB ERROR] Failed to get assets for ${profileId}:`, error);
+    throw error;
+  }
 }
 
 export async function saveAssets(profileId: string, assets: Asset[]) {
@@ -180,6 +188,7 @@ export async function saveDebts(profileId: string, debts: Debt[]) {
   existing.docs.forEach(doc => batch.delete(doc.ref));
 
   debts.forEach(debt => {
+    if (!debt.id) return; // Skip if no ID
     const ref = db.collection('profiles').doc(profileId).collection('debts').doc(debt.id);
     batch.set(ref, debt);
   });
@@ -190,8 +199,13 @@ export async function saveDebts(profileId: string, debts: Debt[]) {
 
 // Expense 관리
 export async function getExpenses(profileId: string): Promise<RecurringExpense[]> {
-  const snapshot = await db.collection('profiles').doc(profileId).collection('expenses').get();
-  return snapshot.docs.map(doc => doc.data() as RecurringExpense);
+  try {
+    const snapshot = await db.collection('profiles').doc(profileId).collection('expenses').get();
+    return snapshot.docs.map(doc => doc.data() as RecurringExpense);
+  } catch (error) {
+    console.error(`[DB ERROR] Failed to get expenses:`, error);
+    return [];
+  }
 }
 
 export async function saveExpenses(profileId: string, expenses: RecurringExpense[]) {
@@ -201,6 +215,7 @@ export async function saveExpenses(profileId: string, expenses: RecurringExpense
   existing.docs.forEach(doc => batch.delete(doc.ref));
 
   expenses.forEach(expense => {
+    if (!expense.id) return;
     const ref = db.collection('profiles').doc(profileId).collection('expenses').doc(expense.id);
     batch.set(ref, expense);
   });
@@ -211,8 +226,13 @@ export async function saveExpenses(profileId: string, expenses: RecurringExpense
 
 // Income 관리
 export async function getIncomes(profileId: string): Promise<Income[]> {
-  const snapshot = await db.collection('profiles').doc(profileId).collection('incomes').get();
-  return snapshot.docs.map(doc => doc.data() as Income);
+  try {
+    const snapshot = await db.collection('profiles').doc(profileId).collection('incomes').get();
+    return snapshot.docs.map(doc => doc.data() as Income);
+  } catch (error) {
+    console.error(`[DB ERROR] Failed to get incomes:`, error);
+    return [];
+  }
 }
 
 export async function saveIncomes(profileId: string, incomes: Income[]) {
@@ -222,6 +242,7 @@ export async function saveIncomes(profileId: string, incomes: Income[]) {
   existing.docs.forEach(doc => batch.delete(doc.ref));
 
   incomes.forEach(income => {
+    if (!income.id) return;
     const ref = db.collection('profiles').doc(profileId).collection('incomes').doc(income.id);
     batch.set(ref, { ...income, profileId });
   });
