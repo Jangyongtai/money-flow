@@ -3,8 +3,8 @@
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
 
-// 이 토큰은 사용자만 아는 복잡한 난수로 설정합니다.
-const SECRET_TOKEN = 'mf_7a2b9c1d8e3f4g5h6i7j8k9l0m1n2o3p';
+// 15자리의 복잡한 나만의 비밀 키입니다.
+const SECRET_TOKEN = 'v8Xn2p9RkL5mQt7';
 
 function AuthContent({ children }: { children: React.ReactNode }) {
     const searchParams = useSearchParams();
