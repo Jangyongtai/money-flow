@@ -1,0 +1,12 @@
+# App Hosting 설정 파일
+kind: "publishedConfig"
+apiVersion: "v1"
+
+# 환경 변수 및 비밀 설정
+env:
+  - variable: FIREBASE_SERVICE_ACCOUNT_KEY
+    secret: FIREBASE_SERVICE_ACCOUNT_KEY
+  - variable: GEMINI_API_KEY
+    secret: GEMINI_API_KEY
+  - variable: HOLIDAY_API_KEY
+    secret: HOLIDAY_API_KEY

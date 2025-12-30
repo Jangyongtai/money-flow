@@ -60,21 +60,21 @@ const LUNAR_HOLIDAYS: Array<{
   name: string
   duration?: number // 연휴 기간 (일수)
 }> = [
-  // 2024년
-  { year: 2024, month: 2, day: 9, name: "설날", duration: 3 }, // 2/9-11
-  { year: 2024, month: 5, day: 15, name: "부처님오신날" },
-  { year: 2024, month: 9, day: 16, name: "추석", duration: 3 }, // 9/16-18
-  
-  // 2025년
-  { year: 2025, month: 1, day: 28, name: "설날", duration: 3 }, // 1/28-30
-  { year: 2025, month: 5, day: 5, name: "부처님오신날" },
-  { year: 2025, month: 10, day: 5, name: "추석", duration: 3 }, // 10/5-7
-  
-  // 2026년
-  { year: 2026, month: 2, day: 16, name: "설날", duration: 3 }, // 2/16-18
-  { year: 2026, month: 5, day: 24, name: "부처님오신날" },
-  { year: 2026, month: 9, day: 25, name: "추석", duration: 3 }, // 9/25-27
-]
+    // 2024년
+    { year: 2024, month: 2, day: 9, name: "설날", duration: 3 }, // 2/9-11
+    { year: 2024, month: 5, day: 15, name: "부처님오신날" },
+    { year: 2024, month: 9, day: 16, name: "추석", duration: 3 }, // 9/16-18
+
+    // 2025년
+    { year: 2025, month: 1, day: 28, name: "설날", duration: 3 }, // 1/28-30
+    { year: 2025, month: 5, day: 5, name: "부처님오신날" },
+    { year: 2025, month: 10, day: 5, name: "추석", duration: 3 }, // 10/5-7
+
+    // 2026년
+    { year: 2026, month: 2, day: 16, name: "설날", duration: 3 }, // 2/16-18
+    { year: 2026, month: 5, day: 24, name: "부처님오신날" },
+    { year: 2026, month: 9, day: 25, name: "추석", duration: 3 }, // 9/25-27
+  ]
 
 /**
  * 특정 연도의 고정 공휴일 목록 반환
@@ -92,7 +92,7 @@ function getFixedHolidays(year: number): Holiday[] {
  */
 function getLunarHolidays(year: number): Holiday[] {
   const holidays: Holiday[] = []
-  
+
   for (const holiday of LUNAR_HOLIDAYS) {
     if (holiday.year === year) {
       const duration = holiday.duration || 1
@@ -102,7 +102,7 @@ function getLunarHolidays(year: number): Holiday[] {
         const dateMonth = date.getMonth() + 1
         const dateDay = date.getDate()
         const dateStr = `${year}-${String(dateMonth).padStart(2, "0")}-${String(dateDay).padStart(2, "0")}`
-        
+
         holidays.push({
           date: dateStr,
           name: i === 0 ? holiday.name : `${holiday.name} 연휴`,
@@ -111,7 +111,7 @@ function getLunarHolidays(year: number): Holiday[] {
       }
     }
   }
-  
+
   return holidays
 }
 
@@ -132,7 +132,7 @@ export function isHoliday(date: Date): boolean {
   const month = date.getMonth() + 1
   const day = date.getDate()
   const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`
-  
+
   const holidays = getHolidays(year)
   return holidays.some((h) => h.date === dateStr)
 }
@@ -145,7 +145,7 @@ export function getHolidayInfo(date: Date): Holiday | null {
   const month = date.getMonth() + 1
   const day = date.getDate()
   const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`
-  
+
   const holidays = getHolidays(year)
   return holidays.find((h) => h.date === dateStr) || null
 }
@@ -273,27 +273,8 @@ async function fetchHolidaysFromApi(year: number): Promise<Holiday[]> {
 }
 
 export async function getHolidaysDynamic(year: number): Promise<Holiday[]> {
-  // 1) 캐시 우선
-  const cached = await readCache(year)
-  if (cached?.length) return cached
-
-  // 2) 구글 공공 KR Holidays ICS 시도
-  try {
-    const fetched = await fetchHolidaysFromIcs(year)
-    await writeCache(year, fetched)
-    return fetched
-  } catch (err) {
-    console.warn("ICS 공휴일 fetch 실패:", err)
-  }
-
-  // 3) data.go.kr API 시도, 실패 시 하드코딩 fallback
-  try {
-    const fetched = await fetchHolidaysFromApi(year)
-    await writeCache(year, fetched)
-    return fetched
-  } catch (error) {
-    console.error("공휴일 API 실패, 하드코딩 데이터로 fallback:", error)
-    return getHolidays(year)
-  }
+  // 외부 API 호출을 생략하고 미리 정의된 하드코딩 데이터만 사용합니다.
+  // 이로써 HOLIDAY_API_KEY를 설정할 필요가 없어집니다.
+  return getHolidays(year)
 }
 
